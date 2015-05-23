@@ -1,4 +1,5 @@
-﻿using CuriosityStore.DTO;
+﻿using CuriosityStore.BackingStore;
+using CuriosityStore.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,26 @@ namespace CuriosityStore.Controllers
 {
     public class CuriosityEventController : ApiController
     {
-        List<CuriosityEvent> _dummyEvents = new List<CuriosityEvent>()
-        {
-            new CuriosityEvent() { Name = "DanIsCool" },
-            new CuriosityEvent() { Name = "HasanIsCooler" }
-        };
+        private readonly static ICuriosityStore _inMemoryCuriosityStore = new InMemoryCuriosityStore();
 
         public IEnumerable<CuriosityEvent> GetAll()
         {
-            return _dummyEvents;
+            return GetCuriosityStore().GetAll().ToCuriosityEvents();
         }
 
-        public IEnumerable<CuriosityEvent> GetRecent(TimeSpan periodBack)
+        public IEnumerable<CuriosityEvent> GetRecent(DateTime since)
         {
-            return _dummyEvents;
+            return GetCuriosityStore().GetSince(since).ToCuriosityEvents();
         }
 
         public void Add(CuriosityEvent curiosityEvent)
         {
-            throw new NotImplementedException();
+            GetCuriosityStore().Add(curiosityEvent.ToCuriosity());
+        }
+
+        private ICuriosityStore GetCuriosityStore()
+        {
+            return _inMemoryCuriosityStore;
         }
     }
 }

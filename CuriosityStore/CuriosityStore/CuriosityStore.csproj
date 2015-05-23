@@ -79,7 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BackingStore\Curiosity.cs" />
+    <Compile Include="BackingStore\ICuriosityStore.cs" />
+    <Compile Include="BackingStore\InMemoryCuriosityStore.cs" />
     <Compile Include="Controllers\CuriosityEventController.cs" />
+    <Compile Include="Controllers\CuriosityExtensions.cs" />
     <Compile Include="DTO\CuriosityEvent.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
