@@ -9,9 +9,14 @@ namespace Rover.Common
     public class OutputEvent
     {
         public OutputEvent(){}
-        public OutputEvent(DateTime timeStampUtc, String name)
+        public OutputEvent(
+            DateTime timeStampUtc, 
+            String name,
+            string description)
         {
+            TimeStampUtc = timeStampUtc;
             Name = name;
+            Description = description;
         }
 
 
@@ -19,5 +24,10 @@ namespace Rover.Common
         public String Name { get; set; }
         public String Description { get; set; }
         public String TriggeredBy { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("{0}:{1}", Name, Description);
+        }
     }
 }

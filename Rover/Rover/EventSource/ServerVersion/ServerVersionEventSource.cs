@@ -28,7 +28,7 @@ namespace Rover.EventSource.ServerVersion
 
         public void Start()
         {
-            _timer = new System.Threading.Timer(OnTick, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+            _timer = new System.Threading.Timer(OnTick, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
 
         private async void OnTick(Object state)
@@ -38,6 +38,7 @@ namespace Rover.EventSource.ServerVersion
                 String response = await GetURLContentsAsync(environmentUi);
 
                 ServerVersionInputEvent inputEvent = ToServerVersionInputEvent(response);
+
                 _subject.OnNext(inputEvent);
             }
         }
@@ -46,6 +47,9 @@ namespace Rover.EventSource.ServerVersion
         {
             var content = new MemoryStream();
             var webReq = (HttpWebRequest)WebRequest.Create(url);
+
+            //We want a new TCP/IP connection so the load balancers give us a new connection to a new server in the pool
+            webReq.KeepAlive = false;
 
             using (WebResponse response = await webReq.GetResponseAsync())
             { 

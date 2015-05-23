@@ -26,6 +26,8 @@ namespace Rover
             serverVersionEventProcessor.AssociateEventSink(new ConsoleOutputEventSink());
             serverVersionEventProcessor.AssociateEventSink(new CuriosityEventSink("http://curiositystore.azurewebsites.net/api/curiosityevent/add"));
 
+            serverVersionEventProcessor.StartProcessing();
+
             Console.ReadKey();
         }
     }

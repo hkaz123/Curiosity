@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\EventProcessingStrategy.cs" />
     <Compile Include="Common\IEventSink.cs" />
     <Compile Include="Common\IEventSource.cs" />
     <Compile Include="Common\InputEvent.cs" />

@@ -11,10 +11,12 @@ namespace Rover.EventProcessing
     public abstract class EventProcessor<T> where T : InputEvent
     {
         private Subject<OutputEvent> _outputEvents = new Subject<OutputEvent>();
-       
+        private Subject<T> _inputEvents = new Subject<T>();
+        
         public void AssociateEventSource(IEventSource<T> eventSource)
         {
-            eventSource.GetObservable().Subscribe(OnAddInputEvent);
+            //This multiplexes the event sources
+            eventSource.GetObservable().Subscribe(_inputEvents.OnNext, _inputEvents.OnError, _inputEvents.OnCompleted);
         }
 
         public void AssociateEventSink(IEventSink eventSink)
@@ -22,12 +24,22 @@ namespace Rover.EventProcessing
             eventSink.SetOutputEvents(_outputEvents);
         }
 
+        public void StartProcessing()
+        {
+            OnStartProcessing(GetInputEvents());
+        }
+
+        protected abstract void OnStartProcessing(IObservable<T> inputEvents);
+
         private IObservable<OutputEvent> GetOutputEvents()
         {
             return _outputEvents;
         }
 
-        protected abstract void OnAddInputEvent(T evt);
+        private IObservable<T> GetInputEvents()
+        {
+            return _inputEvents;
+        }
 
         protected void AddOutputEvent(OutputEvent outputEvent)
         {
