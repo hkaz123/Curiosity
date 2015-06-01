@@ -9,12 +9,14 @@ namespace Rover.EventSink
 {
     class ConsoleOutputEventSink : IEventSink
     {
-        private object filePath;
+       
 
         public void SetOutputEvents(IObservable<OutputEvent> outputEvents)
         {
             outputEvents.Subscribe(sie => Console.WriteLine(sie));
-           
+            
+            
+
         }
     }
 }

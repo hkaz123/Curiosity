@@ -15,17 +15,18 @@ namespace Rover.EventSource.ServerVersion
     /// <summary>
     /// Hits the web servers and generates Server.Version events
     /// </summary>
+    
     public class ServerVersionEventSource : IEventSource<ServerVersionInputEvent>
     {
         private readonly List<String> _environmentUrls;
         private System.Threading.Timer _timer;
         private Subject<ServerVersionInputEvent> _subject = new Subject<ServerVersionInputEvent>();
-
+        
         public ServerVersionEventSource(IEnumerable<String> environmentUrls)
         {
             _environmentUrls = new List<string>(environmentUrls);            
         }
-
+        
         public void Start()
         {
             _timer = new System.Threading.Timer(OnTick, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
@@ -47,6 +48,7 @@ namespace Rover.EventSource.ServerVersion
         {
             var content = new MemoryStream();
             var webReq = (HttpWebRequest)WebRequest.Create(url);
+            var csv = new StringBuilder();
 
             //We want a new TCP/IP connection so the load balancers give us a new connection to a new server in the pool
             webReq.KeepAlive = false;
@@ -61,7 +63,7 @@ namespace Rover.EventSource.ServerVersion
             
             return Encoding.UTF8.GetString(content.ToArray());
         }
-
+        
         private ServerVersionInputEvent ToServerVersionInputEvent(String response)
         {
             XElement serverVersion = XElement.Parse(response);
@@ -72,12 +74,15 @@ namespace Rover.EventSource.ServerVersion
                 DateTime.Parse(serverVersion.Elements("BornOn").First().Value),
                  DateTime.Parse(serverVersion.Elements("ProcessStartedTime").First().Value),
                  DateTime.Parse(serverVersion.Elements("ApplicationDomainStartedTimeUTC").First().Value),
-                serverVersion.Elements("LogicalEnvironment").First().Value);       
+                serverVersion.Elements("LogicalEnvironment").First().Value);
+                 
         }
+       
 
         public IObservable<ServerVersionInputEvent> GetObservable()
         {
             return _subject;
         }
+        
     }
 }
