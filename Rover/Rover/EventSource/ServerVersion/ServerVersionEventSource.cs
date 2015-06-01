@@ -30,7 +30,7 @@ namespace Rover.EventSource.ServerVersion
         {
             _timer = new System.Threading.Timer(OnTick, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
-
+        
         private async void OnTick(Object state)
         {
             foreach (String environmentUi in _environmentUrls)
@@ -42,7 +42,7 @@ namespace Rover.EventSource.ServerVersion
                 _subject.OnNext(inputEvent);
             }
         }
-
+       
         private async Task<String> GetURLContentsAsync(string url)
         {
             var content = new MemoryStream();

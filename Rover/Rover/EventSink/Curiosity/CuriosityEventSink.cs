@@ -40,7 +40,7 @@ namespace Rover.EventSink
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
             request.ContentLength = byteArray.Length;
 
-            Stream dataStream = request.GetRequestStream();            
+            Stream dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);
             dataStream.Close();
 
@@ -54,3 +54,5 @@ namespace Rover.EventSink
         }
     }
 }
+
+    
