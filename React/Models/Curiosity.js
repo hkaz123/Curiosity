@@ -29,5 +29,5 @@ schema.statics.getCuriosities = function(callback) {
 
 };
 
-// Return a Tweet model based upon the defined schema
+// Return a curiosity model based upon the defined schema
 module.exports = Curiosity = mongoose.model('Curiosity', schema);

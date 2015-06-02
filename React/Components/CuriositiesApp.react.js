@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Tweets = require('./Curiosities.react.js');
+var Curiosities = require('./Curiosities.react.js');
 var Loader = require('./Loader.react.js');
 var NotificationBar = require('./NotificationBar.react.js');
 
 // Export the CuriositiesApp component
 module.exports = CuriositiesApp = React.createClass({
 
-    // Method to add a tweet to our timeline
+    // Method to add a curiosity to our timeline
     addCuriosity: function(curiosity){
 
         // Get current application state
@@ -56,10 +56,10 @@ module.exports = CuriositiesApp = React.createClass({
     },
 
     // Method to show the unread curiosities
-    showNewTweets: function(){
+    showNewCuriosities: function(){
 
         // Get current application state
-        var updated = this.state.tweets;
+        var updated = this.state.Curiosities;
 
         // Mark our curiosities active
         updated.forEach(function(curiosity){
@@ -67,7 +67,7 @@ module.exports = CuriositiesApp = React.createClass({
         });
 
         // Set application state (active curiosities + reset unread count)
-        this.setState({tweets: updated, count: 0});
+        this.setState({curiosities: updated, count: 0});
 
     },
 
@@ -118,7 +118,7 @@ module.exports = CuriositiesApp = React.createClass({
             // Set application state (Paging, Increment page)
             this.setState({paging: true, page: this.state.page + 1});
 
-            // Get the next page of tweets from the server
+            // Get the next page of curiosities from the server
             this.getPage(this.state.page);
 
         }
@@ -157,7 +157,7 @@ module.exports = CuriositiesApp = React.createClass({
         // On curiosity event emission...
         socket.on('curiosity', function (data) {
 
-            // Add a tweet to our queue
+            // Add a curiosity to our queue
             self.addCuriosity(data);
 
         });
