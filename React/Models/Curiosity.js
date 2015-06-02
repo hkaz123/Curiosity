@@ -12,7 +12,7 @@ schema.statics.getCuriosities = function(callback) {
 
 
   // Query the db, using skip and limit to achieve page chunks
-  Curiosity.find({},'servername datetime description' .sort({date: 'desc'}).exec(function(err,docs){
+  Curiosity.find({},'servername datetime description' .sort({date: 'datetime'}).exec(function(err,docs){
 
     // If everything is cool...
     if(!err) {

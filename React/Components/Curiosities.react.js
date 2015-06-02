@@ -1,17 +1,21 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Tweet = require('./Curiosity.react.js');
+var Curiosity = require('./Curiosity.react.js');
+var Curiosity = require('./streamHandler.js');
 
-module.exports = Tweets = React.createClass({
+module.exports = Curiosities = React.createClass({
 
   // Render our tweets
   render: function(){
 
-    // Build list items of single tweet components using map
+    // Build list items of single curiosity components using map
     var content = this.props.curiosities.map(function(curiosity){
       return (
-        <Curiosity key={curiosity._id} curiosity={curiosity} />
+        <li><Curiosity name={curiosity.Name} curiosity={curiosity} /></li>
+        <li><Curiosity date={curiosity.DateTime} curiosity={curiosity} /></li>
+        <li><Curiosity description={curiosity.Description} curiosity={curiosity} />);</li>
+
       )
     });
 

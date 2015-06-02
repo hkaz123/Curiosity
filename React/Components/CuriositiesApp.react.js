@@ -14,17 +14,11 @@ module.exports = CuriositiesApp = React.createClass({
         // Get current application state
         var updated = this.state.curiosities;
 
-        // Increment the curiosities count
-        var count = this.state.count + 1;
-
-        // Increment the skip count
-        var skip = this.state.skip + 1;
-
         // Add curiosity to the beginning of the curiosities array
         updated.unshift(curiosity);
 
         // Set application state
-        this.setState({curiosities: updated, count: count, skip: skip});
+        this.setState({curiosities: updated, count: count});
 
     },
 
@@ -33,7 +27,7 @@ module.exports = CuriositiesApp = React.createClass({
 
         // Setup our ajax request
         var request = new XMLHttpRequest(), self = this;
-        request.open('GET', 'page/' + page + "/" + this.state.skip, true);
+        request.open("GET", "http://curiositystore.azurewebsites.net/api/curiosityevent/GetAll", true);
         request.onload = function() {
 
             // If everything is cool...
@@ -134,8 +128,7 @@ module.exports = CuriositiesApp = React.createClass({
             curiosities: props.curiosities,
             count: 0,
             page: 0,
-            paging: false,
-            skip: 0,
+            paging: false,            
             done: false
         };
 
