@@ -63,13 +63,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\EventProcessingStrategy.cs" />
+    <Compile Include="Common\Framework\Time\SchedularBasedTimeProvider.cs" />
+    <Compile Include="Common\Framework\Time\SystemClockTimeProvider.cs" />
     <Compile Include="Common\IEventSink.cs" />
     <Compile Include="Common\IEventSource.cs" />
     <Compile Include="Common\InputEvent.cs" />
+    <Compile Include="Common\Framework\Time\ITimeProvider.cs" />
     <Compile Include="Common\OutputEvent.cs" />
     <Compile Include="Common\ServerVersion\ServerVersionInputEvent.cs" />
     <Compile Include="EventProcessing\EventProcessor.cs" />
+    <Compile Include="EventProcessing\ServerVersion\EnvironmentServerPoolChangeWatcher.cs" />
+    <Compile Include="EventProcessing\ServerVersion\EnvironmentVersionChangeWatcher.cs" />
     <Compile Include="EventProcessing\ServerVersion\ServerVersionEventProcessor.cs" />
+    <Compile Include="EventProcessing\ServerVersion\Watcher.cs" />
     <Compile Include="EventSink\ConsoleOutputEventSink.cs" />
     <Compile Include="EventSink\Curiosity\CuriosityEvent.cs" />
     <Compile Include="EventSink\Curiosity\CuriosityEventSink.cs" />

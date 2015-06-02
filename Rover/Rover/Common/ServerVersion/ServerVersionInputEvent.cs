@@ -1,36 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright company="Aeriandi Limited">
+// Copyright (c) Aeriandi Limited. All Rights Reserved. Confidential and Proprietary Information of Aeriandi Limited.
+// </copyright>
+
+using System;
 
 namespace Rover.Common.ServerVersion
 {
     public class ServerVersionInputEvent : InputEvent
     {
-        public ServerVersionInputEvent(){}
+        private readonly string _server;
+        private readonly string _version;
+        private readonly DateTime _bornOnUtc;
+        private readonly DateTime _processStartedTimeUtc;
+        private readonly DateTime _applicationDomainStartedTimeUtc;
+        private readonly string _logicalEnvironment;
+
         public ServerVersionInputEvent(
+            DateTime timestampUtc,
             String server ,
             String version,
             DateTime bornOnUtc,
             DateTime processStartedTimeUtc,        
             DateTime applicationDomainStartedTimeUtc,
-            String logicalEnvironment )
+            String logicalEnvironment) : base(timestampUtc)
         {
-            Server = server;
-            Version = version;
-            BornOnUtc = bornOnUtc;
-            ProcessStartedTimeUtc = processStartedTimeUtc;
-            ApplicationDomainStartedTimeUtc = applicationDomainStartedTimeUtc;
-            LogicalEnvironment = logicalEnvironment;
+            _server = server;
+            _version = version;
+            _bornOnUtc = bornOnUtc;
+            _processStartedTimeUtc = processStartedTimeUtc;
+            _applicationDomainStartedTimeUtc = applicationDomainStartedTimeUtc;
+            _logicalEnvironment = logicalEnvironment;
         }
 
-        public String Server { get; set; }
-        public String Version { get; set; }
-        public DateTime BornOnUtc { get; set; }
-        public DateTime ProcessStartedTimeUtc { get; set; }
-        public DateTime ApplicationDomainStartedTimeUtc { get; set; }
-        public String LogicalEnvironment { get; set; }
+        public string Server
+        {
+            get { return _server; }
+        }
+
+        public string Version
+        {
+            get { return _version; }
+        }
+
+        public DateTime BornOnUtc
+        {
+            get { return _bornOnUtc; }
+        }
+
+        public DateTime ProcessStartedTimeUtc
+        {
+            get { return _processStartedTimeUtc; }
+        }
+
+        public DateTime ApplicationDomainStartedTimeUtc
+        {
+            get { return _applicationDomainStartedTimeUtc; }
+        }
+
+        public string LogicalEnvironment
+        {
+            get { return _logicalEnvironment; }
+        }
+
 
         public override string ToString()
         {

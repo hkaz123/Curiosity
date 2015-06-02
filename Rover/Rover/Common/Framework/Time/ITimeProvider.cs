@@ -4,10 +4,11 @@
 
 using System;
 
-namespace Rover.Common
+namespace Rover.Common.Framework.Time
 {
-    public interface IEventSource<T> where T : InputEvent
+    public interface ITimeProvider
     {
-        IObservable<T> GetObservable();
+        DateTime Now { get; }
+        DateTime UtcNow { get; }
     }
 }

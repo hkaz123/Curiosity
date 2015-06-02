@@ -1,4 +1,9 @@
-﻿using Rover.Common;
+﻿// <copyright company="Aeriandi Limited">
+// Copyright (c) Aeriandi Limited. All Rights Reserved. Confidential and Proprietary Information of Aeriandi Limited.
+// </copyright>
+
+using Rover.Common;
+using Rover.Common.Framework.Time;
 using Rover.Common.ServerVersion;
 using System;
 using System.Collections.Generic;
@@ -13,20 +18,23 @@ using System.Xml.Linq;
 namespace Rover.EventSource.ServerVersion
 {
     /// <summary>
-    /// Hits the web servers and generates Server.Version events
-    /// </summary>
-    
+    /// Hits the web servers and generates Server.Version ServerVersionInputEvent events
+    /// </summary>    
     public class ServerVersionEventSource : IEventSource<ServerVersionInputEvent>
     {
+        private readonly ITimeProvider _timeProvider;
         private readonly List<String> _environmentUrls;
         private System.Threading.Timer _timer;
-        private Subject<ServerVersionInputEvent> _subject = new Subject<ServerVersionInputEvent>();
+        private readonly Subject<ServerVersionInputEvent> _subject = new Subject<ServerVersionInputEvent>();
         
-        public ServerVersionEventSource(IEnumerable<String> environmentUrls)
+        public ServerVersionEventSource(
+            ITimeProvider timeProvider,
+            IEnumerable<String> environmentUrls)
         {
-            _environmentUrls = new List<string>(environmentUrls);            
+            _timeProvider = timeProvider;
+            _environmentUrls = new List<string>(environmentUrls);
         }
-        
+
         public void Start()
         {
             _timer = new System.Threading.Timer(OnTick, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
@@ -48,19 +56,21 @@ namespace Rover.EventSource.ServerVersion
         {
             var content = new MemoryStream();
             var webReq = (HttpWebRequest)WebRequest.Create(url);
-            var csv = new StringBuilder();
 
             //We want a new TCP/IP connection so the load balancers give us a new connection to a new server in the pool
             webReq.KeepAlive = false;
 
             using (WebResponse response = await webReq.GetResponseAsync())
-            { 
-                using (Stream responseStream = response.GetResponseStream())
+            using (Stream responseStream = response.GetResponseStream())
+            {
+                if (responseStream == null)
                 {
-                    await responseStream.CopyToAsync(content);
+                    throw new NullReferenceException("responseStream is null");
                 }
-            }
             
+                await responseStream.CopyToAsync(content);
+            }
+                        
             return Encoding.UTF8.GetString(content.ToArray());
         }
         
@@ -69,20 +79,18 @@ namespace Rover.EventSource.ServerVersion
             XElement serverVersion = XElement.Parse(response);
 
             return new ServerVersionInputEvent(
+                _timeProvider.UtcNow,
                 serverVersion.Elements("Server").First().Value,
                 serverVersion.Elements("Version").First().Value,
                 DateTime.Parse(serverVersion.Elements("BornOn").First().Value),
-                 DateTime.Parse(serverVersion.Elements("ProcessStartedTime").First().Value),
-                 DateTime.Parse(serverVersion.Elements("ApplicationDomainStartedTimeUTC").First().Value),
-                serverVersion.Elements("LogicalEnvironment").First().Value);
-                 
+                DateTime.Parse(serverVersion.Elements("ProcessStartedTime").First().Value),
+                DateTime.Parse(serverVersion.Elements("ApplicationDomainStartedTimeUTC").First().Value),
+                serverVersion.Elements("LogicalEnvironment").First().Value);                 
         }
        
-
         public IObservable<ServerVersionInputEvent> GetObservable()
         {
             return _subject;
-        }
-        
+        }        
     }
 }

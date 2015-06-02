@@ -1,11 +1,12 @@
-﻿using Rover.EventProcessing.ServerVersion;
+﻿// <copyright company="Aeriandi Limited">
+// Copyright (c) Aeriandi Limited. All Rights Reserved. Confidential and Proprietary Information of Aeriandi Limited.
+// </copyright>
+
+using Rover.Common.Framework.Time;
+using Rover.EventProcessing.ServerVersion;
 using Rover.EventSink;
 using Rover.EventSource.ServerVersion;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rover
 {
@@ -13,7 +14,11 @@ namespace Rover
     {
         static void Main(string[] args)
         {
-            ServerVersionEventSource eventSource = new ServerVersionEventSource(new[] 
+            ITimeProvider timeProvider = new SystemClockTimeProvider();
+
+            ServerVersionEventSource eventSource = new ServerVersionEventSource(
+                timeProvider,
+                new[] 
                 {
                     "https://latest.liquid-contact.com/player/server.version",
                     "https://stage.liquid-contact.com/player/server.version",
@@ -21,7 +26,7 @@ namespace Rover
                 });
             eventSource.Start();
 
-            ServerVersionEventProcessor serverVersionEventProcessor = new ServerVersionEventProcessor();
+            ServerVersionEventProcessor serverVersionEventProcessor = new ServerVersionEventProcessor(timeProvider);
             serverVersionEventProcessor.AssociateEventSource(eventSource);
             serverVersionEventProcessor.AssociateEventSink(new ConsoleOutputEventSink());
             serverVersionEventProcessor.AssociateEventSink(new CuriosityEventSink("http://curiositystore.azurewebsites.net/api/curiosityevent/add"));
