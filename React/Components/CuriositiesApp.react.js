@@ -33,7 +33,7 @@ module.exports = CuriositiesApp = React.createClass({
             // If everything is cool...
             if (request.status >= 200 && request.status < 400){
 
-                // Load our next page
+                // Load our next curiosity
                 self.loadPagedCuriosities(JSON.parse(request.responseText));
 
             } else {
@@ -48,7 +48,7 @@ module.exports = CuriositiesApp = React.createClass({
         request.send();
 
     },
-
+    
     // Method to show the unread curiosities
     showNewCuriosities: function(){
 

@@ -8,6 +8,7 @@ var CHANGE_EVENT = 'change';
 var _curiosities= {};
 
 
+
 /**
  * Update a curiosity item.
  * @param  {string} id

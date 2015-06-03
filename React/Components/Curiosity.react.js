@@ -14,7 +14,7 @@ module.exports = Curiosity = React.createClass({
             <a href={"http://curiositystore.azurewebsites.net/api/curiosityevent/GetAll" + curiosity.description}>{curiosity.datetime}</a> 
             <span className="description">@{curiosity.name}</span> 
           </cite>
-          <span className="description">{curiosity.datetime}</span>
+          <span className="description">{curiosity.description}</span>
         </blockquote>
       </li>
     )
